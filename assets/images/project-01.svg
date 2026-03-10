@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-label="Portrait of Mara Voss">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f1ebe2"/>
+      <stop offset="100%" stop-color="#d6c8b4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg1)"/>
+  <ellipse cx="620" cy="770" rx="250" ry="340" fill="#d8b487"/>
+  <ellipse cx="620" cy="760" rx="205" ry="270" fill="#f2d8b8"/>
+  <rect x="462" y="870" width="316" height="290" rx="120" fill="#131313"/>
+  <path d="M430 720c60-210 330-290 390-10-42-120-120-172-198-172-80 0-155 52-192 182z" fill="#111"/>
+  <circle cx="560" cy="740" r="14" fill="#2e2a27"/>
+  <circle cx="685" cy="740" r="14" fill="#2e2a27"/>
+  <path d="M560 838c32 36 88 36 120 0" stroke="#6f4f3c" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <text x="94" y="1390" fill="#1f1b17" font-family="Arial, sans-serif" font-size="54" letter-spacing="7">MARA VOSS</text>
+</svg>

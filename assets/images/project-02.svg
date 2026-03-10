@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-label="Portrait of Elio Kade">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#efe4d3"/>
+      <stop offset="100%" stop-color="#cbb292"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg2)"/>
+  <rect x="350" y="430" width="500" height="700" rx="250" fill="#202020"/>
+  <ellipse cx="600" cy="760" rx="220" ry="270" fill="#f0ceb0"/>
+  <path d="M420 680c12-205 360-240 360 30-34-125-122-205-201-205-75 0-131 50-159 175z" fill="#151515"/>
+  <ellipse cx="535" cy="760" rx="12" ry="15" fill="#2f2926"/>
+  <ellipse cx="665" cy="760" rx="12" ry="15" fill="#2f2926"/>
+  <path d="M545 860c24 30 86 30 110 0" stroke="#674734" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <rect x="470" y="1030" width="260" height="210" rx="100" fill="#262626"/>
+  <text x="94" y="1390" fill="#1f1b17" font-family="Arial, sans-serif" font-size="54" letter-spacing="7">ELIO KADE</text>
+</svg>

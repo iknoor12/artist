@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-label="Portrait of Lina Mercier">
+  <defs>
+    <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f2ece4"/>
+      <stop offset="100%" stop-color="#cfb697"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg6)"/>
+  <ellipse cx="600" cy="760" rx="215" ry="275" fill="#efcfb5"/>
+  <path d="M416 712c34-214 350-245 380 10-34-132-120-198-201-198-76 0-145 56-179 188z" fill="#1a1a1a"/>
+  <circle cx="545" cy="754" r="12" fill="#2b2622"/>
+  <circle cx="657" cy="754" r="12" fill="#2b2622"/>
+  <path d="M546 844c22 22 86 22 108 0" stroke="#694a39" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <rect x="458" y="1008" width="284" height="238" rx="108" fill="#2b2b2b"/>
+  <path d="M446 664c66-54 236-54 306 0" stroke="#1f1f1f" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <text x="94" y="1390" fill="#1f1b17" font-family="Arial, sans-serif" font-size="54" letter-spacing="7">LINA MERCIER</text>
+</svg>

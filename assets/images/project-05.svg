@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-label="Portrait of Ari Solenne">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#efe8de"/>
+      <stop offset="100%" stop-color="#d3be9f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg5)"/>
+  <ellipse cx="600" cy="760" rx="226" ry="286" fill="#edcdb3"/>
+  <path d="M404 702c16-230 358-262 396 0-48-121-120-178-205-178-79 0-145 49-191 178z" fill="#221f1c"/>
+  <rect x="448" y="1000" width="304" height="248" rx="110" fill="#b99f7a"/>
+  <circle cx="541" cy="752" r="13" fill="#2f2a25"/>
+  <circle cx="663" cy="752" r="13" fill="#2f2a25"/>
+  <path d="M542 844c24 28 92 28 116 0" stroke="#654736" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M472 624c40-38 218-34 264 0" stroke="#1f1c19" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <text x="94" y="1390" fill="#1f1b17" font-family="Arial, sans-serif" font-size="54" letter-spacing="7">ARI SOLENNE</text>
+</svg>

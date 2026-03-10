@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-label="Portrait of Soren Vale">
+  <defs>
+    <linearGradient id="bg7" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3ede4"/>
+      <stop offset="100%" stop-color="#c8ad8b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg7)"/>
+  <ellipse cx="600" cy="760" rx="224" ry="286" fill="#efcfb6"/>
+  <path d="M404 706c28-220 350-252 398 8-52-122-137-188-214-188-78 0-142 54-184 180z" fill="#181818"/>
+  <ellipse cx="543" cy="756" rx="12" ry="14" fill="#272320"/>
+  <ellipse cx="664" cy="756" rx="12" ry="14" fill="#272320"/>
+  <path d="M544 850c23 24 92 24 115 0" stroke="#6a4a38" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <rect x="452" y="1006" width="296" height="242" rx="104" fill="#ab8f68"/>
+  <path d="M452 642c72-66 228-70 296 0" stroke="#1d1d1d" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <text x="94" y="1390" fill="#1f1b17" font-family="Arial, sans-serif" font-size="54" letter-spacing="7">SOREN VALE</text>
+</svg>
