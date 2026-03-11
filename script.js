@@ -187,10 +187,9 @@ function openDetail(index) {
   const panelFrom = mobileMode ? { yPercent: 105 } : { xPercent: 102 };
   const panelTo = mobileMode ? { yPercent: 0 } : { xPercent: 0 };
 
-  const tl = gsap.timeline();
-  tl.to(detailOverlay, { opacity: 1, duration: 0.35, ease: "power2.out", pointerEvents: "auto" })
-    .fromTo(detailPanel, panelFrom, { ...panelTo, duration: 0.6, ease: "power3.out" }, 0)
-    .to(".slide.is-active .art-trigger", { scale: 1.02, duration: 0.4, ease: "power2.out" }, 0);
+  gsap.timeline()
+    .to(detailOverlay, { opacity: 1, duration: 0.35, ease: "power2.out", pointerEvents: "auto" })
+    .fromTo(detailPanel, panelFrom, { ...panelTo, duration: 0.6, ease: "power3.out" }, 0);
 }
 
 function closeDetail() {
@@ -202,19 +201,17 @@ function closeDetail() {
   const mobileMode = window.matchMedia("(max-width: 640px)").matches;
   const panelTo = mobileMode ? { yPercent: 105 } : { xPercent: 102 };
 
-  const tl = gsap.timeline({
+  gsap.timeline({
     onComplete: () => {
       detailPanel.setAttribute("aria-hidden", "true");
       detailOverlay.setAttribute("aria-hidden", "true");
     },
-  });
-
-  tl.to(detailOverlay, { opacity: 0, duration: 0.3, ease: "power2.out", pointerEvents: "none" })
-    .to(detailPanel, { ...panelTo, duration: 0.48, ease: "power3.in" }, 0)
-    .to(".slide.is-active .art-trigger", { scale: 1, duration: 0.35, ease: "power2.out" }, 0);
+  })
+    .to(detailOverlay, { opacity: 0, duration: 0.3, ease: "power2.out", pointerEvents: "none" })
+    .to(detailPanel, { ...panelTo, duration: 0.48, ease: "power3.in" }, 0);
 }
 
-function setupParallax() {
+function setupPointerParallax() {
   const depthBg = document.querySelector(".depth-bg");
   sliderShell.addEventListener("mousemove", (event) => {
     const rect = sliderShell.getBoundingClientRect();
@@ -234,43 +231,6 @@ function setupParallax() {
       ease: "power3.out",
     });
   });
-}
-
-function setupSmoothScroll() {
-  if (typeof Lenis === "undefined") {
-    return;
-  }
-
-  const lenis = new Lenis({
-    duration: 1.2,
-    smoothWheel: true,
-    wheelMultiplier: 0.85,
-    touchMultiplier: 1.05,
-  });
-
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", (event) => {
-      const target = anchor.getAttribute("href");
-      if (!target || target === "#") {
-        return;
-      }
-
-      const el = document.querySelector(target);
-      if (!el) {
-        return;
-      }
-
-      event.preventDefault();
-      lenis.scrollTo(el, { offset: -20 });
-    });
-  });
-
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
 }
 
 function setupTouchSwipe() {
@@ -296,7 +256,8 @@ function setupTouchSwipe() {
 
 function setupWheelNavigation() {
   let wheelLock = false;
-  window.addEventListener(
+
+  sliderShell.addEventListener(
     "wheel",
     (event) => {
       event.preventDefault();
@@ -305,8 +266,7 @@ function setupWheelNavigation() {
         return;
       }
 
-      const inHero = window.scrollY < window.innerHeight * 0.85;
-      if (!inHero || Math.abs(event.deltaY) < 26) {
+      if (Math.abs(event.deltaY) < 25) {
         return;
       }
 
@@ -323,6 +283,14 @@ function setupWheelNavigation() {
     },
     { passive: false }
   );
+}
+
+function disableNavLinks() {
+  document.querySelectorAll(".site-nav a, .brand").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+    });
+  });
 }
 
 function bindEvents() {
@@ -362,23 +330,22 @@ function playIntro() {
   gsap.set(".project-caption", { x: 20, opacity: 0 });
   gsap.set(".site-header", { y: -16, opacity: 0 });
 
-  const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
-  intro
-    .to(".hero-divider", { width: "96vw", duration: 1.15, ease: "power2.inOut" })
+  gsap.timeline({ defaults: { ease: "power3.out" } })
+    .to(".site-header", { y: 0, opacity: 1, duration: 0.5 })
+    .to(".hero-divider", { width: "96vw", duration: 1.15, ease: "power2.inOut" }, "<0.1")
     .to(".slide.is-active", { scale: 1, opacity: 1, duration: 1.05 }, "<0.08")
     .to(".project-index", { x: 0, opacity: 1, duration: 0.7 }, "<0.24")
-    .to(".project-caption", { x: 0, opacity: 1, duration: 0.62 }, "<0.08")
-    .to(".site-header", { y: 0, opacity: 1, duration: 0.55 }, "<0.05");
+    .to(".project-caption", { x: 0, opacity: 1, duration: 0.62 }, "<0.08");
 }
 
 function initPortfolio() {
   buildSlides();
   setCounter(currentIndex);
   bindEvents();
-  setupParallax();
-  setupSmoothScroll();
+  setupPointerParallax();
   setupTouchSwipe();
   setupWheelNavigation();
+  disableNavLinks();
   playIntro();
 }
 

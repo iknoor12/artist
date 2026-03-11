@@ -5,7 +5,6 @@
   --muted: #5f584f;
   --gold: #b89a63;
   --line: rgba(29, 26, 22, 0.22);
-  --surface: rgba(255, 255, 255, 0.72);
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
@@ -30,8 +29,11 @@ body {
   color: var(--charcoal);
   font-family: "Plus Jakarta Sans", sans-serif;
   overflow-x: hidden;
-  overflow-y: hidden;
-  height: 100vh;
+}
+
+a,
+a:visited {
+  color: inherit;
 }
 
 .noise-layer {
@@ -52,16 +54,20 @@ body {
 .site-header {
   position: fixed;
   inset: 0 0 auto 0;
-  z-index: 20;
-  padding: var(--space-4);
-  pointer-events: none;
+  z-index: 30;
+  padding: var(--space-3) var(--space-4);
+  backdrop-filter: blur(6px);
+  background: rgba(245, 241, 234, 0.72);
+  border-bottom: 1px solid rgba(29, 26, 22, 0.08);
 }
 
 .brand-wrap {
-  pointer-events: auto;
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .brand {
@@ -74,20 +80,42 @@ body {
 
 .site-nav {
   display: flex;
-  gap: 1.1rem;
+  gap: 1.25rem;
+  flex-wrap: wrap;
 }
 
 .site-nav a {
+  position: relative;
   text-decoration: none;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.72rem;
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
 
-.site-nav a:hover {
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.25rem;
+  width: 100%;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.site-nav a:hover,
+.site-nav a.is-active {
   color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.site-nav a:hover::after,
+.site-nav a.is-active::after {
+  transform: scaleX(1);
 }
 
 main {
@@ -98,6 +126,85 @@ main {
 .section {
   width: 100%;
   position: relative;
+}
+
+.page-preview-grid {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.preview-card {
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(29, 26, 22, 0.1);
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.preview-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(29, 26, 22, 0.12);
+  border-color: rgba(184, 154, 99, 0.35);
+}
+
+.preview-card h2 {
+  margin: 0 0 0.4rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.45rem;
+}
+
+.preview-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.top-spaced {
+  padding-top: calc(var(--space-6) + 2.25rem);
+}
+
+.home,
+.gallery-section,
+.collections-section,
+.exhibitions-section,
+.about-section,
+.contact-section {
+  padding: calc(var(--space-6) + 1.5rem) var(--space-4) var(--space-6);
+}
+
+.home {
+  min-height: 85vh;
+  display: grid;
+  align-items: center;
+}
+
+.home-inner {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.home-inner h1 {
+  margin: 0.7rem 0 1.5rem;
+  max-width: 16ch;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2.3rem, 1.6rem + 2.8vw, 4.8rem);
+  line-height: 0.98;
+  font-weight: 600;
+}
+
+.jump-link {
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  color: var(--charcoal);
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 0.35rem;
 }
 
 .hero {
@@ -259,6 +366,115 @@ main {
   text-transform: uppercase;
 }
 
+.section-head {
+  width: min(1240px, 100%);
+  margin: 0 auto 1.6rem;
+}
+
+.section-head h2 {
+  margin: 0.45rem 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.8rem, 1.3rem + 1.4vw, 3rem);
+  font-weight: 600;
+}
+
+.gallery-grid {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.gallery-card {
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  padding: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(29, 26, 22, 0.14);
+}
+
+.gallery-card img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-card p {
+  margin: 0.65rem 0 0.2rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.2rem;
+}
+
+.gallery-card span {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.collections-grid,
+.exhibition-columns {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.exhibition-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.collection-card,
+.exhibition-columns article {
+  background: rgba(255, 255, 255, 0.48);
+  border: 1px solid rgba(29, 26, 22, 0.08);
+  padding: 1.1rem;
+}
+
+.collection-card h3,
+.exhibition-columns h3 {
+  margin: 0 0 0.65rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.4rem;
+}
+
+.collection-card p,
+.exhibition-columns p,
+.section-copy {
+  margin: 0;
+  line-height: 1.75;
+  color: #2a2722;
+}
+
+.about-section .section-copy,
+.contact-section .section-copy,
+.social-links {
+  width: min(1240px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.social-links {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.social-links a,
+.section-copy a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
 .eyebrow {
   margin: 0;
   text-transform: uppercase;
@@ -349,6 +565,15 @@ main {
 }
 
 @media (max-width: 980px) {
+  .brand-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .hero-grid {
     grid-template-columns: 52px minmax(0, 1fr) 52px;
     grid-template-rows: auto auto;
@@ -365,11 +590,19 @@ main {
     min-height: 400px;
   }
 
+  .gallery-grid,
+  .collections-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .exhibition-columns {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
   .site-header {
-    padding: var(--space-3);
+    padding: var(--space-2) var(--space-3);
   }
 
   .site-nav {
@@ -378,6 +611,15 @@ main {
 
   .site-nav a {
     font-size: 0.64rem;
+  }
+
+  .home,
+  .gallery-section,
+  .collections-section,
+  .exhibitions-section,
+  .about-section,
+  .contact-section {
+    padding: calc(var(--space-6) + 0.75rem) var(--space-3) var(--space-5);
   }
 
   .hero {
@@ -400,6 +642,15 @@ main {
 
   .project-index {
     font-size: clamp(1.7rem, 1rem + 6vw, 2.7rem);
+  }
+
+  .gallery-grid,
+  .collections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-preview-grid {
+    grid-template-columns: 1fr;
   }
 
   .detail-panel {
