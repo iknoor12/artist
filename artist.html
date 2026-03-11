@@ -3,11 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Premium artist portfolio with cinematic slider transitions and editorial design."
-    />
-    <title>Atelier Noire | Artist Portfolio</title>
+    <title>Artist | Atelier Noire</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,36 +11,29 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="artist-page.css" />
   </head>
   <body>
     <div class="noise-layer" aria-hidden="true"></div>
 
     <header class="site-header" id="siteHeader">
       <div class="hdr-grid">
-
-        <!-- Logo -->
         <div class="hdr-logo">
-          <a class="hdr-logo-link" href="index.html" aria-label="Home">
+          <a class="hdr-logo-link" href="index.html" aria-label="Back to portfolio">
             <span class="hdr-logo-line1">DE2<sup>&reg;</sup></span>
             <span class="hdr-logo-line2">K24</span>
           </a>
         </div>
-
-        <!-- Contact -->
         <div class="hdr-contact">
           <p class="hdr-label">Available for Freelance</p>
           <a href="mailto:designembraced@gmail.com">designembraced@gmail.com</a>
           <a href="tel:+4407749737297">+44 07749 737297</a>
         </div>
-
-        <!-- Services -->
         <div class="hdr-services">
           <p>Web Design &nbsp;&middot;&nbsp; UI / UX</p>
           <p>Branding &nbsp;|&nbsp; Typeface Design</p>
           <p>Motion Design</p>
         </div>
-
-        <!-- Social -->
         <div class="hdr-social">
           <span class="hdr-label">Social:</span>
           <div class="hdr-social-links">
@@ -53,46 +42,30 @@
             <a href="#" aria-label="LinkedIn">LI</a>
           </div>
         </div>
-
-        <!-- Nav -->
         <nav class="hdr-nav" aria-label="Main navigation">
-          <a class="hdr-nav-link is-active" href="#">WRK</a>
+          <a class="hdr-nav-link" href="index.html">WRK</a>
           <a class="hdr-nav-link" href="#">ABT</a>
         </nav>
-
       </div>
     </header>
 
-    <main>
-      <section class="hero section">
-        <div class="hero-divider" aria-hidden="true"></div>
-        <div class="hero-grid">
-          <button class="nav-arrow" id="prevBtn" aria-label="Previous project"></button>
+    <!-- Full-screen slide viewer — slides injected by artist-page.js -->
+    <div class="ap-viewer" id="apViewer"></div>
 
-          <div class="slider-shell" id="sliderShell">
-            <div class="depth-bg" aria-hidden="true"></div>
-            <div class="slides-track" id="slidesTrack" aria-live="polite"></div>
-          </div>
-
-          <button class="nav-arrow" id="nextBtn" aria-label="Next project"></button>
-
-          <aside class="project-meta">
-            <p class="project-index" id="projectIndex">PR.01 / 07</p>
-            <p class="project-caption" id="projectCaption">Artist Name<br />Artwork Title</p>
-          </aside>
-        </div>
-      </section>
-    </main>
-
-    <div class="click-dark-bg" id="clickDarkBg" aria-hidden="true"></div>
-    <div class="click-text-card" id="clickTextCard" aria-hidden="true">
-      <p class="ctc-label" id="ctcLabel"></p>
-      <p class="ctc-title" id="ctcTitle"></p>
+    <!-- Bottom navigation pill -->
+    <div class="ap-nav-bar" id="apNavBar">
+      <span class="ap-nav-drag-hint" aria-hidden="true">&#8595;</span>
+      <div class="ap-nav-info">
+        <span class="ap-nav-artist" id="apNavArtist"></span>
+        <span class="ap-nav-sep" aria-hidden="true">&mdash;</span>
+        <span class="ap-nav-label" id="apNavLabel"></span>
+        <span class="ap-nav-count" id="apNavCount"></span>
+      </div>
+      <button class="ap-nav-btn ap-nav-btn--close" id="apClose" aria-label="Back to portfolio">&#10005;</button>
     </div>
-    <img class="img-stage" id="imgStage" src="" alt="" aria-hidden="true" />
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="data.js"></script>
-    <script src="script.js" defer></script>
+    <script src="artist-page.js" defer></script>
   </body>
 </html>
