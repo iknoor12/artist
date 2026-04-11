@@ -52,32 +52,74 @@ function getSlides() {
   return Array.from(slidesTrack.querySelectorAll(".slide"));
 }
 
-/* ─── Build Orbit Items with Priyanka Bardhan's Artwork ─── */
+/* ─── Build Orbit Items with Artist-Specific Artwork ─── */
 function buildOrbitItems() {
+  buildOrbitItemsForArtist(currentIndex);
+}
+
+function buildOrbitItemsForArtist(artistIndex) {
   const orbitContainer = document.getElementById("orbitContainer");
   if (!orbitContainer) return;
 
-  // Priyanka Bardhan's artwork images (local)
-  const artworkImages = [
-    'assets/priyanka-bardhan-artworks/artwork-1.png',
-    'assets/priyanka-bardhan-artworks/artwork-2.png',
-    'assets/priyanka-bardhan-artworks/artwork-3.png',
-    'assets/priyanka-bardhan-artworks/artwork-4.png',
-    'assets/priyanka-bardhan-artworks/artwork-5.png'
+  // Define artwork paths for each artist
+  const artistArtworks = [
+    { // 0 - Priyanka Bardhan
+      path: 'assets/priyanka-bardhan-artworks',
+      count: 5
+    },
+    { // 1 - Madhushree Pawar
+      path: 'assets/madhushree-pawar-artworks',
+      count: 5
+    },
+    { // 2 - Vivek Kisan Vadkar
+      path: 'assets/vivek-kisan-vadkar-artworks',
+      count: 3
+    },
+    { // 3 - Panchu Gharami
+      path: 'assets/panchu-gharami-artworks',
+      count: 5
+    },
+    { // 4 - Sangita Agarwal
+      path: 'assets/sangita-agarwal-artworks',
+      count: 5
+    },
+    { // 5 - Sanjana Patel
+      path: 'assets/sanjana-patel-artworks',
+      count: 5
+    },
+    { // 6 - Richard Anbudurai
+      path: 'assets/richard-anbudurai-artworks',
+      count: 3
+    }
   ];
 
+  const artist = artistArtworks[artistIndex];
   const orbitItems = orbitContainer.querySelectorAll(".orbit-item");
+  
   orbitItems.forEach((item, index) => {
     const img = item.querySelector("img");
     if (img) {
-      img.src = artworkImages[index % artworkImages.length];
-      img.alt = `Priyanka Bardhan - Artwork ${index + 1}`;
+      if (artist && artist.path) {
+        // Load from local folder
+        const artworkNum = (index % artist.count) + 1;
+        const newSrc = `${artist.path}/artwork-${artworkNum}.jpg?t=${Date.now()}`;
+        
+        // Force reload by briefly clearing src
+        img.src = '';
+        setTimeout(() => {
+          img.src = newSrc;
+          img.alt = `${projects[artistIndex].artist} - Artwork ${artworkNum}`;
+        }, 10);
+      } else {
+        // Fallback to artist profile image
+        img.src = projects[artistIndex].image;
+        img.alt = `${projects[artistIndex].artist}`;
+      }
       img.loading = 'lazy';
     }
   });
 }
 
-/* ─── Rolling 3-D slide transition ─────────────── */
 function goToSlide(targetIndex, direction) {
   if (isAnimating || targetIndex === currentIndex) return;
 
@@ -86,27 +128,41 @@ function goToSlide(targetIndex, direction) {
   const inSlide   = slides[targetIndex];
   const dir       = direction || (targetIndex > currentIndex ? 1 : -1);
 
+  // Update orbit items immediately when navigation starts
+  buildOrbitItemsForArtist(targetIndex);
+
+  isAnimating = true;
+
   isAnimating = true;
   inSlide.classList.add("is-active");
 
+  // Smooth clip-path reveal animation
   const clipHide = dir > 0 ? "inset(0 100% 0 0%)" : "inset(0 0% 0 100%)";
   const clipShow = "inset(0 0% 0 0%)";
 
+  // Initial state for incoming slide with smooth setup
   gsap.set(inSlide, {
-    xPercent: dir * 108,
-    rotateY: dir * -30,
-    scale: 0.88,
+    xPercent: dir * 120,
+    rotateY: dir * -35,
+    scale: 0.82,
     opacity: 0,
-    z: -90,
+    z: -120,
     transformPerspective: PERSP,
     transformOrigin: dir > 0 ? "left center" : "right center",
+    skewY: dir * 2,
   });
-  gsap.set(inSlide.querySelector(".slide-image-wrap"), { clipPath: clipHide });
-  gsap.set(inSlide.querySelector("img"), { scale: 1.2 });
+  gsap.set(inSlide.querySelector(".slide-image-wrap"), { 
+    clipPath: clipHide,
+    filter: "blur(4px)"
+  });
+  gsap.set(inSlide.querySelector("img"), { 
+    scale: 1.3,
+    filter: "brightness(0.7)"
+  });
   gsap.set(inSlide.querySelector(".slide-hover-overlay"), { opacity: 0 });
 
+  // Enhanced timeline with smooth easing
   const tl = gsap.timeline({
-    defaults: { ease: "expo.inOut" },
     onComplete() {
       outSlide.classList.remove("is-active");
       gsap.set(outSlide, { clearProps: "all" });
@@ -118,67 +174,105 @@ function goToSlide(targetIndex, direction) {
       gsap.set(inSlide.querySelector("img"), { clearProps: "all" });
       gsap.set(inSlide.querySelector(".slide-hover-overlay"), { clearProps: "all" });
       currentIndex = targetIndex;
-      isAnimating  = false;
+      isAnimating = false;
+      
+      // Orbit items are now updated at the start of navigation
+      // buildOrbitItems();
     },
   });
 
+  // Outgoing slide - smooth exit with scroll direction
   tl.to(outSlide, {
-    xPercent: dir * -108,
-    rotateY: dir * 30,
-    scale: 0.88,
+    xPercent: dir * -130,
+    rotateY: dir * 35,
+    scale: 0.78,
     opacity: 0,
-    z: -90,
-    duration: 0.88,
+    z: -130,
+    duration: 0.9,
     transformPerspective: PERSP,
     transformOrigin: dir > 0 ? "right center" : "left center",
-    ease: "power3.inOut",
-  }, 0)
-  .to(outSlide.querySelector("img"), {
-    scale: 0.9,
-    filter: "grayscale(100%) brightness(0.72)",
-    duration: 0.88,
-    ease: "power3.inOut",
+    ease: "power2.inOut",
+    skewY: dir * -2,
+  }, 0);
+  
+  tl.to(outSlide.querySelector("img"), {
+    scale: 0.85,
+    filter: "grayscale(100%) brightness(0.6) blur(2px)",
+    duration: 0.9,
+    ease: "power2.inOut",
+  }, 0);
+  
+  tl.to(outSlide.querySelector(".slide-image-wrap"), {
+    filter: "blur(6px)",
+    duration: 0.7,
+    ease: "power2.inOut",
   }, 0);
 
+  // Incoming slide - smooth entrance from opposite direction
   tl.to(inSlide, {
     xPercent: 0,
     rotateY: 0,
     scale: 1,
     opacity: 1,
     z: 0,
-    duration: 1.05,
+    skewY: 0,
+    duration: 1.1,
     transformOrigin: "center center",
     transformPerspective: PERSP,
     ease: "power3.out",
-  }, 0.05)
-  .to(inSlide.querySelector(".slide-image-wrap"), {
+  }, 0.05);
+  
+  tl.to(inSlide.querySelector(".slide-image-wrap"), {
     clipPath: clipShow,
-    duration: 0.92,
-    ease: "power3.inOut",
-  }, 0.1)
-  .to(inSlide.querySelector("img"), {
+    filter: "blur(0px)",
+    duration: 0.95,
+    ease: "power2.inOut",
+  }, 0.15);
+  
+  tl.to(inSlide.querySelector("img"), {
     scale: 1,
-    filter: "grayscale(100%) brightness(0.92)",
-    duration: 1.05,
+    filter: "brightness(1)",
+    duration: 1.1,
     ease: "power3.out",
   }, 0.05);
 
+  // Smooth text transitions with direction-aware animation
   tl.fromTo(projectIndex,
-    { x: dir * 44,  opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.62, ease: "power3.out" },
-    0.24
-  )
-  .fromTo(projectCaption,
-    { x: dir * 22,  opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.56, ease: "power3.out" },
+    { x: dir * 52, opacity: 0, scale: 0.95 },
+    { x: 0, opacity: 1, scale: 1, duration: 0.7, ease: "power3.out" },
     0.3
   );
+  
+  tl.fromTo(projectCaption,
+    { x: dir * 28, opacity: 0, scale: 0.98 },
+    { x: 0, opacity: 1, scale: 1, duration: 0.65, ease: "power3.out" },
+    0.36
+  );
+
+  // Add a subtle parallax motion to depth background
+  const depthBg = sliderShell.querySelector(".depth-bg");
+  if (depthBg) {
+    tl.to(depthBg, {
+      x: dir * -30,
+      duration: 0.9,
+      ease: "power2.inOut",
+    }, 0);
+  }
 
   setCounter(targetIndex);
+  
+  // Update orbit items is now called in the onComplete callback
+  // buildOrbitItems();
 }
 
-function prevSlide() { goToSlide((currentIndex - 1 + projects.length) % projects.length, -1); }
-function nextSlide() { goToSlide((currentIndex + 1) % projects.length, 1); }
+function prevSlide() {
+  if (isAnimating) return;
+  goToSlide((currentIndex - 1 + projects.length) % projects.length, -1);
+}
+function nextSlide() {
+  if (isAnimating) return;
+  goToSlide((currentIndex + 1) % projects.length, 1);
+}
 
 /* ─── Hover effects (GSAP-driven) ────────── */
 function setupHoverEffects() {
@@ -270,17 +364,26 @@ function setupTouchSwipe() {
 /* ─── Wheel navigation with inertia feel ─── */
 function setupWheelNavigation() {
   let wheelLock = false;
+  let lastWheelTime = 0;
 
   sliderShell.addEventListener("wheel", (e) => {
     e.preventDefault();
+
+    // Reduce threshold for more responsive scrolling
+    if (Math.abs(e.deltaY) < 10) return;
+
+    // Prevent rapid-fire scrolling
+    const now = Date.now();
+    if (now - lastWheelTime < 300) return;
+    lastWheelTime = now;
+
     if (wheelLock || isAnimating) return;
-    if (Math.abs(e.deltaY) < 28) return;
 
     wheelLock = true;
     if (e.deltaY > 0) nextSlide(); else prevSlide();
 
-    const cooldown = Math.min(1100, Math.max(650, 900 - Math.abs(e.deltaY) * 0.9));
-    setTimeout(() => { wheelLock = false; }, cooldown);
+    // Shorter cooldown for smoother navigation
+    setTimeout(() => { wheelLock = false; }, 400);
   }, { passive: false });
 }
 
@@ -310,6 +413,17 @@ function bindEvents() {
   prevBtn.addEventListener("click", prevSlide);
   nextBtn.addEventListener("click", nextSlide);
 
+  // Add keyboard navigation
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      nextSlide();
+    }
+  });
+
   setupHoverEffects();
   setupPointerParallax();
   setupTouchSwipe();
@@ -325,8 +439,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  buildSlides();
-  buildOrbitItems();
-  setCounter(currentIndex);
-  bindEvents();
+  // Show loading state
+  document.body.classList.add("is-loading");
+
+  // Initialize after a brief delay to ensure DOM is ready
+  setTimeout(() => {
+    buildSlides();
+    buildOrbitItems();
+    setCounter(currentIndex);
+    bindEvents();
+    document.body.classList.remove("is-loading");
+  }, 100);
 });
