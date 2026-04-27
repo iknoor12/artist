@@ -5,6 +5,7 @@
   --muted: #5f584f;
   --gold: #b89a63;
   --line: rgba(29, 26, 22, 0.22);
+  --orbit-radius: 380px;
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
@@ -431,55 +432,55 @@ main {
 /* ── Orbiting Artwork Images ── */
 @keyframes orbit-1 {
   0% {
-    transform: rotate(0deg) translateX(380px);
+    transform: rotate(0deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
   100% {
-    transform: rotate(360deg) translateX(380px);
+    transform: rotate(360deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
 }
 
 @keyframes orbit-2 {
   0% {
-    transform: rotate(72deg) translateX(380px);
+    transform: rotate(72deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
   100% {
-    transform: rotate(432deg) translateX(380px);
+    transform: rotate(432deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
 }
 
 @keyframes orbit-3 {
   0% {
-    transform: rotate(144deg) translateX(380px);
+    transform: rotate(144deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
   100% {
-    transform: rotate(504deg) translateX(380px);
+    transform: rotate(504deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
 }
 
 @keyframes orbit-4 {
   0% {
-    transform: rotate(216deg) translateX(380px);
+    transform: rotate(216deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
   100% {
-    transform: rotate(576deg) translateX(380px);
+    transform: rotate(576deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
 }
 
 @keyframes orbit-5 {
   0% {
-    transform: rotate(288deg) translateX(380px);
+    transform: rotate(288deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
   100% {
-    transform: rotate(648deg) translateX(380px);
+    transform: rotate(648deg) translateX(var(--orbit-radius));
     opacity: 0.8;
   }
 }
@@ -862,6 +863,10 @@ main {
 }
 
 @media (max-width: 1200px) {
+  :root {
+    --orbit-radius: 300px;
+  }
+
   .hero-grid {
     height: min(72vh, 700px);
     min-height: 390px;
@@ -880,6 +885,10 @@ main {
 }
 
 @media (max-width: 980px) {
+  :root {
+    --orbit-radius: 150px;
+  }
+
   .brand-wrap {
     flex-direction: column;
     align-items: flex-start;
@@ -926,7 +935,20 @@ main {
   }
 
   .orbit-container {
-    display: none;
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: min(100%, 360px);
+    height: min(100vw, 360px);
+    margin: 0.35rem auto 0;
+  }
+
+  .orbit-item {
+    width: clamp(84px, 16vw, 110px);
+    height: clamp(104px, 21vw, 138px);
+    margin: calc(clamp(104px, 21vw, 138px) / -2) 0 0 calc(clamp(84px, 16vw, 110px) / -2);
+    border-radius: 6px;
   }
 
   .gallery-grid,
@@ -940,6 +962,10 @@ main {
 }
 
 @media (max-width: 640px) {
+  :root {
+    --orbit-radius: 112px;
+  }
+
   .site-header {
     padding: var(--space-2) var(--space-3);
   }
@@ -987,6 +1013,18 @@ main {
     margin-top: 0.2rem;
   }
 
+  .orbit-container {
+    width: min(100%, 290px);
+    height: 290px;
+    margin-top: 0.1rem;
+  }
+
+  .orbit-item {
+    width: 74px;
+    height: 92px;
+    margin: -46px 0 0 -37px;
+  }
+
   .project-index {
     font-size: clamp(1.7rem, 1rem + 6vw, 2.7rem);
   }
@@ -1007,6 +1045,10 @@ main {
 }
 
 @media (max-width: 420px) {
+  :root {
+    --orbit-radius: 92px;
+  }
+
   .hero {
     padding: 5.75rem 0.85rem 1rem;
   }
@@ -1021,5 +1063,16 @@ main {
     width: 36px;
     height: 36px;
     font-size: 1rem;
+  }
+
+  .orbit-container {
+    width: min(100%, 250px);
+    height: 250px;
+  }
+
+  .orbit-item {
+    width: 64px;
+    height: 80px;
+    margin: -40px 0 0 -32px;
   }
 }
