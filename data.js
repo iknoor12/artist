@@ -23,6 +23,15 @@ const projects = [
     description: "Deconstructing urban chaos into geometric minimalism.",
     link: "https://zigguratss.com/artist/priyanka-bardhan",
     image: IMG[0],
+    artistInfo: {
+      location: "New Delhi, India",
+      totalArtwork: "10",
+      type: "Semi-abstract artist",
+      mediums: ["Acrylic"],
+      style: ["Nature-inspired", "Semi-abstract"],
+      statement: "Her work is inspired by nature and expressed through semi-abstract acrylic painting.",
+      note: "Public bio text is limited on the static page, so this profile uses the artwork and platform details that are visible.",
+    },
     works: [
       { 
         title: "Metropolis Grid", 
@@ -48,6 +57,16 @@ const projects = [
     description: "Immersive botanical studies of organic symmetry.",
     link: "https://zigguratss.com/artist/madhushree-pawar",
     image: IMG[1],
+    artistInfo: {
+      location: "Ahmedabad, India",
+      origin: "Pune, India",
+      totalArtwork: "5",
+      type: "Self-taught artist",
+      mediums: ["Watercolor", "Acrylic", "Pen sketch"],
+      mentor: "Milind Mulik (watercolor artist)",
+      style: ["Nature-inspired", "Spirituality-driven", "Emotional storytelling"],
+      statement: "Art is her lifelong passion. She creates meaningful, soulful artwork and aims to connect emotionally through colors.",
+    },
     works: [
       { 
         title: "Echoes of Flora", 
@@ -73,6 +92,18 @@ const projects = [
     description: "Exploring the architectural soul and silent narratives of heritage.",
     link: "https://zigguratss.com/artist/vivek-kisan-vadkar",
     image: IMG[2],
+    artistInfo: {
+      location: "Karjat, Maharashtra, India",
+      born: "1985",
+      totalArtwork: "3",
+      education: ["Diploma – Khopoli Chitrakala Mahavidyalaya (Mumbai University)"],
+      experience: "15+ years as a professional artist",
+      mediums: ["Oil", "Acrylic"],
+      style: ["Realism blended with imagination", "Figurative + landscape fusion"],
+      themes: ["Everyday life moments", "Nature", "Children / innocence"],
+      achievements: ["State Govt Award (2009)", "Pune Art Festival Award (2010)", "International Artist Magazine finalist"],
+      exhibitions: ["Jehangir Art Gallery", "Taj Art Gallery", "Nehru Centre"],
+    },
     works: [
       { 
         title: "Silent Narratives", 
@@ -98,6 +129,11 @@ const projects = [
     description: "Vibrant tributes to cultural identity and rural rhythms.",
     link: "https://zigguratss.com/artist/panchu-gharami",
     image: IMG[3],
+    artistInfo: {
+      totalArtwork: "20",
+      location: "Kolkata, India",
+      note: "Detailed biography was not available from the static page snapshot, so only the platform-visible facts are shown.",
+    },
     works: [
       { 
         title: "Community Rhythms", 
@@ -123,6 +159,11 @@ const projects = [
     description: "Meditations on divine devotion and spiritual iconography.",
     link: "https://zigguratss.com/artist/sangita-agarwal",
     image: IMG[4],
+    artistInfo: {
+      location: "Howrah, India",
+      totalArtwork: "9",
+      note: "Detailed biography was not accessible from the static page snapshot.",
+    },
     works: [
       { 
         title: "Divine Devotion", 
@@ -148,6 +189,13 @@ const projects = [
     description: "Tactile journeys through traditional motifs and abstract layers.",
     link: "https://zigguratss.com/artist/sanjana-patel",
     image: IMG[5],
+    artistInfo: {
+      totalArtwork: "13",
+      location: "Mumbai, India",
+      mediums: ["Acrylic on canvas"],
+      knownWorks: ["Goucho", "Chasing Waves", "Van Vihar"],
+      note: "Full bio was not accessible from the static HTML snapshot.",
+    },
     works: [
       { 
         title: "Tactile Journey", 
@@ -173,6 +221,12 @@ const projects = [
     description: "Exploring the intersection of painting and memory.",
     link: "https://zigguratss.com/artist/richard-anbudurai",
     image: IMG[6],
+    artistInfo: {
+      totalArtwork: "3",
+      location: "Chennai, India",
+      category: "Master artist",
+      note: "Bio content was not accessible from the static page snapshot.",
+    },
     works: [
       { 
         title: "Colour Narratives", 

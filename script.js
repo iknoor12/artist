@@ -8,6 +8,11 @@ const nextBtn        = document.getElementById("nextBtn");
 const projectIndex   = document.getElementById("projectIndex");
 const projectCaption = document.getElementById("projectCaption");
 const orbitContainer = document.getElementById("orbitContainer");
+const artistInfoPanel = document.getElementById("artistInfoPanel");
+const artistInfoBody  = document.getElementById("artistInfoBody");
+const artistInfoClose = document.getElementById("artistInfoClose");
+
+const mobileInfoQuery = window.matchMedia("(max-width: 980px)");
 
 /* ─── State ────────────────────────────── */
 let currentIndex      = 0;
@@ -24,6 +29,137 @@ function setCounter(index) {
   const p = projects[index];
   projectIndex.textContent = `PR.${pad(index + 1)} / ${pad(projects.length)}`;
   projectCaption.innerHTML = `${p.artist}<br />${p.title}`;
+  renderArtistInfo(index);
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function renderList(items) {
+  return items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+}
+
+function renderField(label, value) {
+  if (!value) return "";
+
+  return `
+    <div class="artist-info-fact">
+      <span class="artist-info-label">${escapeHtml(label)}</span>
+      <p class="artist-info-value">${escapeHtml(value)}</p>
+    </div>
+  `;
+}
+
+function renderListBlock(label, items) {
+  if (!items.length) return "";
+
+  return `
+    <div>
+      <span class="artist-info-label">${escapeHtml(label)}</span>
+      <ul class="artist-info-list">${renderList(items)}</ul>
+    </div>
+  `;
+}
+
+function renderArtistInfo(index) {
+  if (!artistInfoPanel || !artistInfoBody) return;
+
+  const project = projects[index];
+  const info = project.artistInfo || {};
+  const mediums = Array.isArray(info.mediums) ? info.mediums : [];
+  const style = Array.isArray(info.style) ? info.style : [];
+  const themes = Array.isArray(info.themes) ? info.themes : [];
+  const education = Array.isArray(info.education) ? info.education : [];
+  const achievements = Array.isArray(info.achievements) ? info.achievements : [];
+  const exhibitions = Array.isArray(info.exhibitions) ? info.exhibitions : [];
+  const knownWorks = Array.isArray(info.knownWorks) ? info.knownWorks : [];
+
+  artistInfoBody.innerHTML = `
+    <div class="artist-info-header">
+      <div class="artist-info-avatar">
+        <img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.artist)} profile image" />
+      </div>
+      <div>
+        <p class="artist-info-kicker">Artist Profile</p>
+        <h2 class="artist-info-title">${escapeHtml(project.artist)}</h2>
+        <p class="artist-info-subtitle">${escapeHtml(info.location || project.location)}${info.origin ? ` · Origin: ${escapeHtml(info.origin)}` : ""}</p>
+      </div>
+    </div>
+
+    <div class="artist-info-grid">
+      ${renderField("Total Artwork", info.totalArtwork || "—")}
+      ${renderField("Born", info.born || "")}
+      ${renderField("Type", info.type || "")}
+      ${renderField("Experience", info.experience || "")}
+      ${renderField("Mentor", info.mentor || "")}
+      <div class="artist-info-fact">
+        <span class="artist-info-label">View Artist</span>
+        <a class="artist-info-link" href="${escapeHtml(project.link)}" target="_blank" rel="noreferrer">Open profile</a>
+      </div>
+    </div>
+
+    ${renderListBlock("Mediums", mediums)}
+    ${renderListBlock("Style", style)}
+    ${renderListBlock("Themes", themes)}
+
+    <p class="artist-info-bio">${escapeHtml(info.statement || info.bio || project.description)}</p>
+
+    ${education.length ? `
+      <div>
+        <span class="artist-info-label">Education</span>
+        <ul class="artist-info-list">${renderList(education)}</ul>
+      </div>
+    ` : ""}
+
+    ${achievements.length ? `
+      <div>
+        <span class="artist-info-label">Awards</span>
+        <ul class="artist-info-list">${renderList(achievements)}</ul>
+      </div>
+    ` : ""}
+
+    ${exhibitions.length ? `
+      <div>
+        <span class="artist-info-label">Exhibitions</span>
+        <ul class="artist-info-list">${renderList(exhibitions)}</ul>
+      </div>
+    ` : ""}
+
+    ${knownWorks.length ? `
+      <div>
+        <span class="artist-info-label">Known Works</span>
+        <ul class="artist-info-list">${renderList(knownWorks)}</ul>
+      </div>
+    ` : ""}
+
+    ${info.note ? `<p class="artist-info-note">${escapeHtml(info.note)}</p>` : ""}
+  `;
+
+  syncArtistInfoPanel(index);
+}
+
+function syncArtistInfoPanel(index) {
+  if (!artistInfoPanel) return;
+
+  if (mobileInfoQuery.matches) {
+    artistInfoPanel.classList.add("is-visible");
+    return;
+  }
+
+  if (typeof index === "number" && artistInfoPanel.classList.contains("is-visible")) {
+    artistInfoPanel.classList.add("is-visible");
+  }
+}
+
+function toggleArtistInfo() {
+  if (!artistInfoPanel || mobileInfoQuery.matches) return;
+  artistInfoPanel.classList.toggle("is-visible");
 }
 
 /* ─── Build slides ───────────────────────── */
@@ -33,7 +169,7 @@ function buildSlides() {
     slide.className = "slide";
     slide.dataset.index = String(index);
     slide.innerHTML = `
-      <button class="art-trigger" type="button" aria-label="Open details for ${project.title}">
+      <button class="art-trigger" type="button" aria-label="Show artist info for ${project.artist}">
         <figure class="slide-image-wrap">
           <img src="${project.image}" alt="${project.title} by ${project.artist}" />
           <div class="slide-hover-overlay" aria-hidden="true">
@@ -280,6 +416,15 @@ function setupHoverEffects() {
     const img       = slide.querySelector("img");
     const overlay   = slide.querySelector(".slide-hover-overlay");
     const imageWrap = slide.querySelector(".slide-image-wrap");
+    const trigger   = slide.querySelector(".art-trigger");
+
+    if (trigger) {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (!slide.classList.contains("is-active")) return;
+        toggleArtistInfo();
+      });
+    }
 
     slide.addEventListener("mouseenter", () => {
       if (!slide.classList.contains("is-active") || isAnimating) return;
@@ -413,6 +558,18 @@ function bindEvents() {
   prevBtn.addEventListener("click", prevSlide);
   nextBtn.addEventListener("click", nextSlide);
 
+  if (artistInfoClose) {
+    artistInfoClose.addEventListener("click", () => {
+      if (!mobileInfoQuery.matches) {
+        artistInfoPanel.classList.remove("is-visible");
+      }
+    });
+  }
+
+  mobileInfoQuery.addEventListener("change", () => {
+    syncArtistInfoPanel(currentIndex);
+  });
+
   // Add keyboard navigation
   document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") {
@@ -447,6 +604,7 @@ document.addEventListener("DOMContentLoaded", () => {
     buildSlides();
     buildOrbitItems();
     setCounter(currentIndex);
+    syncArtistInfoPanel(currentIndex);
     bindEvents();
     document.body.classList.remove("is-loading");
   }, 100);

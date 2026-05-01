@@ -69,12 +69,12 @@
         <div class="hero-divider" aria-hidden="true"></div>
         <div class="hero-grid">
           <div class="slider-container">
-            <button class="nav-arrow" id="prevBtn" aria-label="Previous project"></button>
+            <button class="nav-arrow" id="prevBtn" aria-label="Previous project"><span class="nav-arrow-label">Back</span></button>
             <div class="slider-shell" id="sliderShell">
               <div class="depth-bg" aria-hidden="true"></div>
               <div class="slides-track" id="slidesTrack" aria-live="polite"></div>
             </div>
-            <button class="nav-arrow" id="nextBtn" aria-label="Next project"></button>
+            <button class="nav-arrow" id="nextBtn" aria-label="Next project"><span class="nav-arrow-label">Next</span></button>
           </div>
 
           <!-- Orbiting Artwork Images -->
@@ -95,6 +95,11 @@
               <img src="assets/priyanka-bardhan-artworks/artwork-5.jpg" alt="Artwork 5 - The Reflection" />
             </div>
           </div>
+
+          <aside class="artist-info-panel" id="artistInfoPanel" aria-live="polite">
+            <button class="artist-info-close" id="artistInfoClose" type="button" aria-label="Close artist information">Close</button>
+            <div class="artist-info-body" id="artistInfoBody"></div>
+          </aside>
 
           <aside class="project-meta">
             <p class="project-index" id="projectIndex">PR.01 / 07</p>
