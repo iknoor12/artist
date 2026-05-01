@@ -146,11 +146,20 @@ function renderArtistInfo(index) {
 
 function syncArtistInfoPanel(index) {
   if (!artistInfoPanel) return;
-  artistInfoPanel.classList.add("is-visible");
+
+  if (mobileInfoQuery.matches) {
+    artistInfoPanel.classList.add("is-visible");
+    return;
+  }
+
+  if (typeof index === "number" && artistInfoPanel.classList.contains("is-visible")) {
+    artistInfoPanel.classList.add("is-visible");
+  }
 }
 
 function toggleArtistInfo() {
-  // Panel always visible, toggle disabled
+  if (!artistInfoPanel || mobileInfoQuery.matches) return;
+  artistInfoPanel.classList.toggle("is-visible");
 }
 
 /* ─── Build slides ───────────────────────── */
