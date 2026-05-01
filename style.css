@@ -1132,20 +1132,22 @@ main {
   .artist-info-panel {
     position: static;
     left: auto;
+    right: auto;
     bottom: auto;
-    width: 100vw;
-    max-width: 100vw;
-    align-self: stretch;
-    margin-left: calc(50% - 50vw);
+    width: min(760px, 100%);
+    max-width: 100%;
+    align-self: center;
+    margin: 0.45rem auto 0;
     transform: none;
-    margin-top: 0.45rem;
     padding: 0.85rem 0.8rem 0.9rem;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    max-height: calc(100vh - 1.5rem);
-    overflow-y: auto;
+    z-index: 18;
+    max-height: none;
+    overflow: visible;
     overscroll-behavior: contain;
+    transition: none;
   }
 
   .artist-info-close {
@@ -1157,7 +1159,7 @@ main {
   }
 
   .artist-info-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 0.6rem;
   }
 
