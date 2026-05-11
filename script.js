@@ -11,6 +11,7 @@ const orbitContainer = document.getElementById("orbitContainer");
 const artistInfoPanel = document.getElementById("artistInfoPanel");
 const artistInfoBody  = document.getElementById("artistInfoBody");
 const artistInfoClose = document.getElementById("artistInfoClose");
+const infoBackdrop = document.getElementById("infoBackdrop");
 
 const mobileInfoQuery = window.matchMedia("(max-width: 980px)");
 
@@ -147,19 +148,26 @@ function renderArtistInfo(index) {
 function syncArtistInfoPanel(index) {
   if (!artistInfoPanel) return;
 
-  if (mobileInfoQuery.matches) {
-    artistInfoPanel.classList.add("is-visible");
-    return;
-  }
-
   if (typeof index === "number" && artistInfoPanel.classList.contains("is-visible")) {
     artistInfoPanel.classList.add("is-visible");
   }
 }
 
 function toggleArtistInfo() {
-  if (!artistInfoPanel || mobileInfoQuery.matches) return;
+  if (!artistInfoPanel) return;
   artistInfoPanel.classList.toggle("is-visible");
+}
+
+function openArtistInfo() {
+  if (!artistInfoPanel) return;
+  artistInfoPanel.classList.add("is-visible");
+  if (infoBackdrop) infoBackdrop.classList.add("is-visible");
+}
+
+function closeArtistInfo() {
+  if (!artistInfoPanel) return;
+  artistInfoPanel.classList.remove("is-visible");
+  if (infoBackdrop) infoBackdrop.classList.remove("is-visible");
 }
 
 /* ─── Build slides ───────────────────────── */
@@ -194,8 +202,8 @@ function buildOrbitItems() {
 }
 
 function buildOrbitItemsForArtist(artistIndex) {
-  const orbitContainer = document.getElementById("orbitContainer");
-  if (!orbitContainer) return;
+  const orbitItems = document.querySelectorAll(".orbit-item");
+  if (!orbitItems.length) return;
 
   // Define artwork paths for each artist
   const artistArtworks = [
@@ -230,8 +238,6 @@ function buildOrbitItemsForArtist(artistIndex) {
   ];
 
   const artist = artistArtworks[artistIndex];
-  const orbitItems = orbitContainer.querySelectorAll(".orbit-item");
-  
   orbitItems.forEach((item, index) => {
     const img = item.querySelector("img");
     if (img) {
@@ -422,7 +428,8 @@ function setupHoverEffects() {
       trigger.addEventListener("click", (event) => {
         event.preventDefault();
         if (!slide.classList.contains("is-active")) return;
-        toggleArtistInfo();
+        openArtistInfo();
+        if (orbitContainer) orbitContainer.dataset.orbitPaused = "true";
       });
     }
 
@@ -546,6 +553,94 @@ function setupScrollParallax() {
   }, { passive: true });
 }
 
+function setupOrbitScrollRotation() {
+  if (!orbitContainer) return;
+
+  const sliderContainer = document.querySelector(".slider-container");
+  const orbitItems = Array.from(document.querySelectorAll(".orbit-item"));
+  const orbitFrontLayer = orbitContainer;
+  const orbitBackLayer = document.createElement("div");
+  orbitBackLayer.className = "orbit-container orbit-container-back is-3d";
+  orbitBackLayer.setAttribute("aria-hidden", "true");
+  orbitFrontLayer.classList.add("orbit-container-front", "is-3d");
+  let useSplitLayers = !mobileInfoQuery.matches;
+  if (sliderContainer && sliderContainer.parentNode && useSplitLayers) {
+    sliderContainer.parentNode.insertBefore(orbitBackLayer, sliderContainer);
+  }
+  const lerp = (start, end, amount) => start + (end - start) * amount;
+  const maxRotation = 540;
+  const autoSpeed = 6;
+  const baseAngles = orbitItems.map((_, index) => (index / orbitItems.length) * 360);
+  let currentRotation = 0;
+  let scrollRotation = 0;
+  let targetScrollRotation = 0;
+  let autoRotation = 0;
+  let lastTime = performance.now();
+  orbitContainer.dataset.orbitPaused = "false";
+
+  const setOrbitPaused = (value) => {
+    orbitContainer.dataset.orbitPaused = value ? "true" : "false";
+  };
+
+  orbitItems.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      setOrbitPaused(true);
+    });
+    item.addEventListener("mouseleave", () => {
+      setOrbitPaused(false);
+    });
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
+      setOrbitPaused(true);
+      openArtistInfo();
+    });
+  });
+
+  const updateTarget = () => {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+    const clamped = Math.min(Math.max(progress, 0), 1);
+    targetScrollRotation = clamped * maxRotation;
+  };
+
+  const animate = (timestamp) => {
+    const deltaSeconds = Math.min(Math.max((timestamp - lastTime) / 1000, 0), 0.05);
+    lastTime = timestamp;
+    scrollRotation = lerp(scrollRotation, targetScrollRotation, 0.06);
+    const isPaused = orbitContainer.dataset.orbitPaused === "true";
+    if (!isPaused) {
+      autoRotation += deltaSeconds * autoSpeed;
+      currentRotation = lerp(currentRotation, scrollRotation + autoRotation, 0.08);
+    }
+    orbitItems.forEach((item, index) => {
+      const angle = (baseAngles[index] + currentRotation) % 360;
+      const normalized = (angle + 360) % 360;
+      const isBack = normalized > 90 && normalized < 270;
+      const targetLayer = useSplitLayers && isBack ? orbitBackLayer : orbitFrontLayer;
+      if (item.parentElement !== targetLayer) {
+        targetLayer.appendChild(item);
+      }
+      item.style.setProperty("--orbit-angle", `${angle}deg`);
+    });
+    requestAnimationFrame(animate);
+  };
+
+  updateTarget();
+  window.addEventListener("scroll", updateTarget, { passive: true });
+  window.addEventListener("resize", updateTarget, { passive: true });
+  mobileInfoQuery.addEventListener("change", (event) => {
+    useSplitLayers = !event.matches;
+    if (!useSplitLayers && orbitBackLayer.parentNode) {
+      orbitBackLayer.parentNode.removeChild(orbitBackLayer);
+      orbitItems.forEach((item) => orbitFrontLayer.appendChild(item));
+    }
+    if (useSplitLayers && sliderContainer && sliderContainer.parentNode && !orbitBackLayer.parentNode) {
+      sliderContainer.parentNode.insertBefore(orbitBackLayer, sliderContainer);
+    }
+  });
+  requestAnimationFrame(animate);
+}
+
 /* ─── Nav links: display-only labels ─────────────────── */
 function disableNavLinks() {
   document.querySelectorAll(".hdr-nav-link, .hdr-logo-link, .hdr-social-links a").forEach((link) => {
@@ -560,9 +655,21 @@ function bindEvents() {
 
   if (artistInfoClose) {
     artistInfoClose.addEventListener("click", () => {
-      if (!mobileInfoQuery.matches) {
-        artistInfoPanel.classList.remove("is-visible");
-      }
+      closeArtistInfo();
+      if (orbitContainer) orbitContainer.dataset.orbitPaused = "false";
+    });
+  }
+
+  if (infoBackdrop) {
+    infoBackdrop.addEventListener("click", () => {
+      closeArtistInfo();
+      if (orbitContainer) orbitContainer.dataset.orbitPaused = "false";
+    });
+  }
+
+  if (artistInfoPanel) {
+    artistInfoPanel.addEventListener("click", (event) => {
+      event.stopPropagation();
     });
   }
 
@@ -586,6 +693,7 @@ function bindEvents() {
   setupTouchSwipe();
   setupWheelNavigation();
   setupScrollParallax();
+  setupOrbitScrollRotation();
   disableNavLinks();
 }
 

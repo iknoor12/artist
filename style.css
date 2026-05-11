@@ -6,6 +6,8 @@
   --gold: #b89a63;
   --line: rgba(29, 26, 22, 0.22);
   --orbit-radius: 380px;
+  --orbit-tilt: 0deg;
+  --orbit-offset: clamp(240px, 24vw, 380px);
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
@@ -23,6 +25,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
+  height: 100%;
 }
 
 body {
@@ -30,7 +33,13 @@ body {
   color: var(--charcoal);
   font-family: "Plus Jakarta Sans", sans-serif;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 img {
@@ -421,6 +430,8 @@ main {
   position: relative;
   height: min(74vh, 760px);
   min-height: 430px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .slider-container {
@@ -430,7 +441,7 @@ main {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(calc(-50% - var(--orbit-offset)), -50%) translateZ(40px);
   justify-content: center;
   z-index: 10;
   width: min(100%, 720px);
@@ -509,12 +520,25 @@ main {
   height: clamp(420px, 42vw, 620px);
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 15;
+  transform: translate(calc(-50% + var(--orbit-offset)), -50%) rotateX(var(--orbit-tilt));
+  transform-style: preserve-3d;
+  will-change: transform;
   pointer-events: none;
 }
 
+.orbit-container-front {
+  z-index: 14;
+  transform: translate(calc(-50% + var(--orbit-offset)), -50%) rotateX(var(--orbit-tilt)) translateZ(-150px);
+}
+
+.orbit-container-back {
+  z-index: 6;
+  transform: translate(calc(-50% + var(--orbit-offset)), -50%) rotateX(var(--orbit-tilt)) translateZ(100px);
+}
+
 .orbit-item {
+  --orbit-angle: 0deg;
+  --orbit-scale: 1;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -531,7 +555,7 @@ main {
   will-change: transform, opacity, box-shadow;
 }
 
-.orbit-item:hover {
+.orbit-container:not(.is-3d) .orbit-item:hover {
   opacity: 1;
   box-shadow: 0 24px 72px rgba(29, 26, 22, 0.42);
   transform: scale(1.02);
@@ -544,7 +568,7 @@ main {
   display: block;
   filter: grayscale(80%) brightness(0.95);
   transition: filter 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: filter;
+  will-change: transform, filter;
 }
 
 .orbit-item:hover img {
@@ -569,6 +593,23 @@ main {
 
 .orbit-item-5 {
   animation: orbit-5 20s linear infinite;
+}
+
+.orbit-container.is-3d .orbit-item {
+  animation: none;
+  transform: rotateY(var(--orbit-angle)) translateZ(var(--orbit-radius)) scale(var(--orbit-scale));
+  transform-style: preserve-3d;
+}
+
+.orbit-container.is-3d .orbit-item:hover {
+  opacity: 1;
+  box-shadow: 0 24px 72px rgba(29, 26, 22, 0.42);
+  --orbit-scale: 1.02;
+}
+
+.orbit-container.is-3d .orbit-item img {
+  transform: rotateY(calc(var(--orbit-angle) * -1));
+  backface-visibility: visible;
 }
 
 .nav-arrow {
@@ -755,10 +796,10 @@ main {
 
 .project-meta {
   position: absolute;
-  right: clamp(0.5rem, 2vw, 2rem);
-  top: 50%;
-  transform: translateY(-50%);
-  text-align: right;
+  left: calc(50% - var(--orbit-offset));
+  top: calc(50% + clamp(190px, 20vw, 260px));
+  transform: translate(-50%, 0);
+  text-align: left;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -784,14 +825,35 @@ main {
   will-change: transform, opacity;
 }
 
+.info-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(246, 242, 236, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+  z-index: 17;
+}
+
+.info-backdrop.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
 .artist-info-panel {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  bottom: 0.5rem;
-  transform: translate(-50%, 16px);
+  top: 50%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
   width: min(760px, calc(100vw - 2rem));
-  padding: 1rem 1.1rem 1.1rem;
-  border: 1px solid rgba(184, 154, 99, 0.18);
+  padding: 1.4rem 1.5rem 1.6rem;
+  border: 3px solid rgba(184, 154, 99, 0.341);
+  border-radius: 20px;
   background: rgba(246, 242, 236, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -799,6 +861,9 @@ main {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  max-height: min(80vh, calc(100vh - 2rem));
+  overflow: hidden;
+  overscroll-behavior: contain;
   transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s ease;
   z-index: 18;
 }
@@ -807,7 +872,7 @@ main {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
 }
 
 .artist-info-close {
@@ -816,6 +881,9 @@ main {
   right: 0.75rem;
   background: transparent;
   color: var(--muted);
+  border: 1px solid rgba(29, 26, 22, 0.12);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -826,6 +894,28 @@ main {
   display: grid;
   gap: 0.9rem;
   padding-top: 0.3rem;
+  max-height: calc(min(80vh, calc(100vh - 2rem)) - 3.5rem);
+  overflow: auto;
+  padding-right: 0.2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184, 154, 99, 0.6) transparent;
+}
+
+.artist-info-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.artist-info-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.artist-info-body::-webkit-scrollbar-thumb {
+  background: rgba(184, 154, 99, 0.6);
+  border-radius: 999px;
+}
+
+.artist-info-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(184, 154, 99, 0.8);
 }
 
 .artist-info-header {
@@ -1110,7 +1200,7 @@ main {
     position: relative;
     left: auto;
     top: auto;
-    transform: none;
+    transform: translateZ(40px);
     display: flex;
     width: 100%;
     max-width: 100%;
@@ -1130,28 +1220,34 @@ main {
   }
 
   .artist-info-panel {
-    position: static;
-    left: auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
     right: auto;
     bottom: auto;
-    width: min(760px, 100%);
+    width: min(720px, calc(100vw - 2rem));
     max-width: 100%;
-    align-self: center;
-    margin: 0.45rem auto 0;
-    transform: none;
-    padding: 0.85rem 0.8rem 0.9rem;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    padding: 1rem 1rem 1.1rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 18;
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s ease;
+  }
+
+  .artist-info-panel.is-visible {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    z-index: 18;
-    max-height: none;
-    overflow: visible;
-    overscroll-behavior: contain;
-    transition: none;
   }
 
   .artist-info-close {
-    display: none;
+    display: inline-flex;
   }
 
   .artist-info-note {
@@ -1167,7 +1263,7 @@ main {
     position: relative;
     left: auto;
     top: auto;
-    transform: none;
+    transform: rotateX(var(--orbit-tilt));
     width: min(100%, 300px);
     height: min(86vw, 300px);
     margin: 0 auto 0;
@@ -1231,12 +1327,20 @@ main {
 
   .slider-container {
     gap: 0.4rem;
+    justify-content: space-between;
+    padding: 0 0.6rem;
   }
 
   .slider-shell {
-    width: min(100%, 240px);
-    height: min(40vh, 240px);
+    width: min(54vw, 190px);
+    height: min(36vh, 190px);
     min-height: 200px;
+  }
+
+  .nav-arrow {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0.2rem 0.3rem;
   }
 
   .art-trigger {
@@ -1248,15 +1352,15 @@ main {
   }
 
   .orbit-container {
-    width: min(100%, 270px);
-    height: 270px;
+    width: min(100%, 420px);
+    height: min(100vw, 420px);
     margin-top: 0.1rem;
   }
 
   .orbit-item {
-    width: 74px;
-    height: 92px;
-    margin: -46px 0 0 -37px;
+    width: 110px;
+    height: 140px;
+    margin: -70px 0 0 -55px;
   }
 
   .project-index {
@@ -1311,24 +1415,24 @@ main {
   }
 
   .slider-shell {
-    width: min(100%, 320px);
-    height: min(52vh, 400px);
-    min-height: 235px;
+    width: min(52vw, 180px);
+    height: min(34vh, 180px);
+    min-height: 160px;
   }
 
   .nav-arrow {
-    min-width: 36px;
-    min-height: 36px;
+    min-width: 30px;
+    min-height: 30px;
   }
 
   .orbit-container {
-    width: min(100%, 250px);
-    height: 250px;
+    width: min(100%, 400px);
+    height: min(100vw, 400px);
   }
 
   .orbit-item {
-    width: 64px;
-    height: 80px;
-    margin: -40px 0 0 -32px;
+    width: 102px;
+    height: 128px;
+    margin: -64px 0 0 -51px;
   }
 }
