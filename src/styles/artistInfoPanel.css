@@ -1,0 +1,268 @@
+/* ─── ARTIST INFO PANEL ────────────────────────────────── */
+.info-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(246, 242, 236, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+  z-index: 17;
+}
+
+.info-backdrop.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.artist-info-panel {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  width: min(760px, calc(100vw - 2rem));
+  padding: 1.4rem 1.5rem 1.6rem;
+  border: 3px solid rgba(184, 154, 99, 0.341);
+  border-radius: 20px;
+  background: rgba(246, 242, 236, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px rgba(29, 26, 22, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  max-height: min(80vh, calc(100vh - 2rem));
+  overflow: hidden;
+  overscroll-behavior: contain;
+  transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s ease;
+  z-index: 18;
+}
+
+.artist-info-panel.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.artist-info-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.75rem;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(29, 26, 22, 0.12);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.artist-info-body {
+  display: grid;
+  gap: 0.9rem;
+  padding-top: 0.3rem;
+  max-height: calc(min(80vh, calc(100vh - 2rem)) - 3.5rem);
+  overflow: auto;
+  padding-right: 0.2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184, 154, 99, 0.6) transparent;
+}
+
+.artist-info-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.artist-info-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.artist-info-body::-webkit-scrollbar-thumb {
+  background: rgba(184, 154, 99, 0.6);
+  border-radius: 999px;
+}
+
+.artist-info-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(184, 154, 99, 0.8);
+}
+
+.artist-info-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.artist-info-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(184, 154, 99, 0.28);
+  box-shadow: 0 10px 24px rgba(29, 26, 22, 0.12);
+}
+
+.artist-info-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.artist-info-kicker {
+  margin: 0 0 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+
+.artist-info-title {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.5rem, 1.1rem + 1vw, 2.2rem);
+  line-height: 0.96;
+}
+
+.artist-info-subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.artist-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.artist-info-fact {
+  padding: 0.8rem 0.85rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(29, 26, 22, 0.08);
+}
+
+.artist-info-label {
+  display: block;
+  margin-bottom: 0.18rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.artist-info-value {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.artist-info-bio {
+  margin: 0;
+  color: var(--charcoal);
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.artist-info-list {
+  margin: 0;
+  padding-left: 1.05rem;
+  color: var(--charcoal);
+  line-height: 1.55;
+  font-size: 0.86rem;
+}
+
+.artist-info-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.artist-info-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 0.18rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+@media (max-width: 980px) {
+  .artist-info-panel {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    width: min(720px, calc(100vw - 2rem));
+    max-width: 100%;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    padding: 1rem 1rem 1.1rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 18;
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s ease;
+  }
+
+  .artist-info-panel.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .artist-info-close {
+    display: inline-flex;
+  }
+
+  .artist-info-note {
+    display: none;
+  }
+
+  .artist-info-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .artist-info-header {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .artist-info-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .artist-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .artist-info-title {
+    font-size: clamp(1.15rem, 1rem + 1.2vw, 1.55rem);
+  }
+
+  .artist-info-bio,
+  .artist-info-value,
+  .artist-info-list {
+    font-size: 0.8rem;
+  }
+}
