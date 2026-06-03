@@ -1,0 +1,156 @@
+/**
+ * ArtistImageCard.module.css
+ * Styles for interactive artist image card with parallax and hover effects.
+ */
+
+/* ═══════════════════════════════════════════════════════
+   SLIDE IMAGE WRAP (MAIN CONTAINER)
+═══════════════════════════════════════════════════════ */
+.slideImageWrap {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  aspect-ratio: 4 / 5;
+  background-color: #f7f4ee;
+  border-radius: 0.75rem;
+  box-shadow: 0 24px 60px rgba(29, 26, 22, 0.14);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SLIDE IMAGE
+═══════════════════════════════════════════════════════ */
+.slideImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  will-change: filter, transform;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HOVER OVERLAY
+═══════════════════════════════════════════════════════ */
+.slideHoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(14, 11, 8, 0.76) 0%,
+    rgba(14, 11, 8, 0.22) 48%,
+    transparent 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 2rem 1.5rem 1.5rem;
+  z-index: 10;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.overlayTitle {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  color: rgba(245, 241, 234, 0.94);
+  line-height: 1.2;
+}
+
+.overlaySubtitle {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  color: rgba(245, 241, 234, 0.75);
+  text-transform: capitalize;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHADOW LAYER (FOR SMOOTH SHADOW TRANSITION)
+═══════════════════════════════════════════════════════ */
+.shadowLayer {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  pointer-events: none;
+  z-index: -1;
+  will-change: box-shadow;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ART TRIGGER BUTTON
+═══════════════════════════════════════════════════════ */
+.artTrigger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  outline: none;
+  font-family: inherit;
+}
+
+.artTrigger:focus-visible {
+  outline: 2px solid rgba(44, 42, 36, 0.5);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .slideHoverOverlay {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .overlayTitle {
+    font-size: 1.2rem;
+  }
+
+  .overlaySubtitle {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .slideHoverOverlay {
+    padding: 1rem 0.8rem 0.8rem;
+  }
+
+  .overlayTitle {
+    font-size: 1rem;
+  }
+
+  .overlaySubtitle {
+    font-size: 0.7rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   ACCESSIBILITY
+═══════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .slideImageWrap,
+  .slideImage,
+  .slideHoverOverlay,
+  .shadowLayer {
+    animation: none;
+    transition: none;
+  }
+}
